@@ -17,6 +17,7 @@ public class MasteryTaskOneLogicTests {
             .withCustomerId(PARENT_PROFILE_CUSTOMER_ID)
             .withMarketplaceId(US_MARKETPLACE_ID)
             .build();
+
         GenerateAdvertisementResponse result = new GenerateAdActivityDagger().handleRequest(request, null);
 
         assertNotNull(result.getAdvertisement(), "Expected a non null advertisement in the response.");
@@ -24,7 +25,7 @@ public class MasteryTaskOneLogicTests {
             "content ID.");
         assertFalse(StringUtils.isBlank(result.getAdvertisement().getContent()), "Expected a non-empty " +
             "advertisement content when generating an advertisement for a customer ID with a parent profile " +
-            "in marketplace ID: " + request.getMarketplaceId());
+             "in marketplace ID: " + request.getMarketplaceId());
     }
 
     @Test

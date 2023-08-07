@@ -4,6 +4,7 @@ import com.amazon.ata.advertising.service.model.RequestContext;
 import com.amazon.ata.advertising.service.model.TargetingPredicate;
 import com.amazon.ata.advertising.service.targeting.predicate.TargetingPredicateResult;
 
+import javax.inject.Inject;
 import java.util.List;
 
 /**
@@ -18,6 +19,7 @@ public class TargetingEvaluator {
      * Creates an evaluator for targeting predicates.
      * @param requestContext Context that can be used to evaluate the predicates.
      */
+
     public TargetingEvaluator(RequestContext requestContext) {
         this.requestContext = requestContext;
     }

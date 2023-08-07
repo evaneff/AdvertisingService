@@ -53,8 +53,8 @@ public class AddTargetingGroupActivity {
             requestedTargetingPredicates,
             contentId));
 
-//        List<TargetingPredicate> targetingPredicates = new ArrayList<>();
-//        if (requestedTargetingPredicates != null) {
+        List<TargetingPredicate> targetingPredicates = new ArrayList<>();
+        if (requestedTargetingPredicates != null) {
 //            for (com.amazon.ata.advertising.service.model.TargetingPredicate targetingPredicate :
 //                requestedTargetingPredicates) {
 //                TargetingPredicate predicate = TargetingPredicateTranslator.fromCoral(targetingPredicate);
@@ -62,8 +62,6 @@ public class AddTargetingGroupActivity {
 //            }
 //        }
 
-        List<TargetingPredicate> targetingPredicates = new ArrayList<>();
-        if (requestedTargetingPredicates != null) {
             targetingPredicates = requestedTargetingPredicates.stream()
                     .map(targetingPredicate -> TargetingPredicateTranslator.fromCoral(targetingPredicate))
                     .collect(Collectors.toList());
