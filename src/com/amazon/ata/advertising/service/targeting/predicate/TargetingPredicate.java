@@ -32,6 +32,7 @@ public abstract class TargetingPredicate {
 
     /**
      * Evaluate whether the information available in the request context passes the targeting predicate.
+     *
      * @param context - information about the incoming request, such as requestor and location
      * @return TRUE/FALSE if the predicate passes, or INDETERMINATE if the evaluation cannot be made
      */

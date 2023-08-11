@@ -1,5 +1,7 @@
 package com.amazon.ata.advertising.service.model;
 
+import com.amazon.ata.advertising.service.targeting.predicate.TargetingPredicateResult;
+
 import java.util.Map;
 import java.util.Objects;
 
@@ -12,6 +14,7 @@ public class TargetingPredicate {
         this.targetingPredicateType = targetingPredicateType;
         this.negate = negate;
         this.attributes = targetingPredicateAttributes;
+
     }
 
     public TargetingPredicate() {
@@ -63,6 +66,7 @@ public class TargetingPredicate {
     }
 
     public static Builder builder() {return new Builder();}
+
 
     public static final class Builder {
         private TargetingPredicateType targetingPredicateType;
