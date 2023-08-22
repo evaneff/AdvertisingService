@@ -61,7 +61,6 @@ public class AdvertisementSelectionLogic {
      *     not be generated.
      */
     public GeneratedAdvertisement selectAdvertisement(String customerId, String marketplaceId) {
-
         TargetingEvaluator evaluator = new TargetingEvaluator(new RequestContext(customerId, marketplaceId));
         GeneratedAdvertisement generatedAdvertisement = new EmptyGeneratedAdvertisement();
         if (StringUtils.isEmpty(marketplaceId)) {
@@ -72,17 +71,12 @@ public class AdvertisementSelectionLogic {
             TreeMap<Double, AdvertisementContent> treeMap = new TreeMap<>();
 
             for (AdvertisementContent content : contents) {
+
                 List<TargetingGroup> groupList = targetingGroupDao.get(content.getContentId());
-                double highest = 0;
                 for (TargetingGroup group : groupList) {
-                    if (evaluator.evaluate(group).isTrue()) {
-                        if (group.getClickThroughRate() > highest) {
-                            highest = group.getClickThroughRate();
+                        treeMap.put(group.getClickThroughRate(), content);
                         }
                     }
-                }
-                treeMap.put(highest, content);
-            }
 
             // Original code
 //            final List<AdvertisementContent> contents = contentDao.get(marketplaceId).stream()
