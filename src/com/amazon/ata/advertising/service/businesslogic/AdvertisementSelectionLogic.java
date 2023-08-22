@@ -74,11 +74,21 @@ public class AdvertisementSelectionLogic {
 
             for (AdvertisementContent content : contents) {
                 List<TargetingGroup> groupList = targetingGroupDao.get(content.getContentId());
+                double highest = 0;
+                //TargetingGroup groupWithHighest;
                 for (TargetingGroup group : groupList) {
                     if (evaluator.evaluate(group).isTrue()) {
-                        treeMap.put(group.getClickThroughRate(), content);
+                        // get CTR - add to??? to figure out which is highest
+                        // whichever CTR is highest, add to tree
+                        if (group.getClickThroughRate() > highest) {
+                            highest = group.getClickThroughRate();
+                        //    groupWithHighest = group;
+                        }
+
                     }
                 }
+                treeMap.put(highest, content);
+
             }
 
             // convert new code to streams
@@ -86,11 +96,9 @@ public class AdvertisementSelectionLogic {
 //            TreeMap<Double, AdvertisementContent> treeMap = contents.stream()
 //                    .flatMap(group -> targetingGroupDao.get(group.getContentId()).stream())
 //                    .filter(group -> evaluator.evaluate(group).isTrue())
-//                    .collect(Collectors.toMap(
-//                            TargetingGroup::getClickThroughRate,
-//                            ));
+//                    .collect(Collectors.toMap(   ,   ));
 
-            
+
             // Original code
 //            final List<AdvertisementContent> contents = contentDao.get(marketplaceId).stream()
 //                    .filter(content -> targetingGroupDao.get(content.getContentId()).stream()
@@ -99,7 +107,7 @@ public class AdvertisementSelectionLogic {
 
 
             if (!treeMap.isEmpty()) {
-//            if (CollectionUtils.isNotEmpty(updatedContents)) {
+//            if (CollectionUtils.isNotEmpty(contents)) {
 //        Then randomly return one of the ads that the customer is eligible for (if any).
 //                AdvertisementContent randomAdvertisementContent = contents.get(random.nextInt(contents.size()));
 //                generatedAdvertisement = new GeneratedAdvertisement(randomAdvertisementContent);
