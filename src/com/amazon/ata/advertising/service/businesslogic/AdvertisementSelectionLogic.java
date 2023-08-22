@@ -68,36 +68,21 @@ public class AdvertisementSelectionLogic {
             LOG.warn("MarketplaceId cannot be null or empty. Returning empty ad.");
         } else {
 
-            // new code
             final List<AdvertisementContent> contents = contentDao.get(marketplaceId);
             TreeMap<Double, AdvertisementContent> treeMap = new TreeMap<>();
 
             for (AdvertisementContent content : contents) {
                 List<TargetingGroup> groupList = targetingGroupDao.get(content.getContentId());
                 double highest = 0;
-                //TargetingGroup groupWithHighest;
                 for (TargetingGroup group : groupList) {
                     if (evaluator.evaluate(group).isTrue()) {
-                        // get CTR - add to??? to figure out which is highest
-                        // whichever CTR is highest, add to tree
                         if (group.getClickThroughRate() > highest) {
                             highest = group.getClickThroughRate();
-                        //    groupWithHighest = group;
                         }
-
                     }
                 }
                 treeMap.put(highest, content);
-
             }
-
-            // convert new code to streams
-//            final List<AdvertisementContent> contents = contentDao.get(marketplaceId);
-//            TreeMap<Double, AdvertisementContent> treeMap = contents.stream()
-//                    .flatMap(group -> targetingGroupDao.get(group.getContentId()).stream())
-//                    .filter(group -> evaluator.evaluate(group).isTrue())
-//                    .collect(Collectors.toMap(   ,   ));
-
 
             // Original code
 //            final List<AdvertisementContent> contents = contentDao.get(marketplaceId).stream()
@@ -107,13 +92,8 @@ public class AdvertisementSelectionLogic {
 
 
             if (!treeMap.isEmpty()) {
-//            if (CollectionUtils.isNotEmpty(contents)) {
-//        Then randomly return one of the ads that the customer is eligible for (if any).
-//                AdvertisementContent randomAdvertisementContent = contents.get(random.nextInt(contents.size()));
-//                generatedAdvertisement = new GeneratedAdvertisement(randomAdvertisementContent);
                 AdvertisementContent highestClickRate = treeMap.lastEntry().getValue();
                 generatedAdvertisement = new GeneratedAdvertisement(highestClickRate);
-
             }
 
         }
