@@ -64,12 +64,13 @@ public class TargetingEvaluator {
 //        return allTruePredicates ? TargetingPredicateResult.TRUE :
 //                TargetingPredicateResult.FALSE;
 //    }
-        ExecutorService executor = Executors.newCachedThreadPool();
+
 
 //        boolean allTruePredicates = targetingGroup.getTargetingPredicates().stream()
 //                .map(predicate -> executor.submit(() -> predicate.evaluate(requestContext)))
 //                .allMatch(targetingPredicateResult -> targetingPredicateResult.isTrue());
 
+        ExecutorService executor = Executors.newCachedThreadPool();
         List<Future<TargetingPredicateResult>> futureList = targetingGroup.getTargetingPredicates().stream()
                 .map(predicate -> executor.submit(() -> predicate.evaluate(requestContext)))
                 .collect(Collectors.toList());

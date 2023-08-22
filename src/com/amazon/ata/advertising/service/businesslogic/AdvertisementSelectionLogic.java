@@ -68,15 +68,44 @@ public class AdvertisementSelectionLogic {
             LOG.warn("MarketplaceId cannot be null or empty. Returning empty ad.");
         } else {
 
-            final List<AdvertisementContent> contents = contentDao.get(marketplaceId).stream()
-                    .filter(content -> targetingGroupDao.get(content.getContentId()).stream()
-                            .anyMatch(group -> evaluator.evaluate(group).isTrue()))
-                            .collect(Collectors.toList());
+            // new code
+            final List<AdvertisementContent> contents = contentDao.get(marketplaceId);
+            TreeMap<Double, AdvertisementContent> treeMap = new TreeMap<>();
 
-            if (CollectionUtils.isNotEmpty(contents)) {
+            for (AdvertisementContent content : contents) {
+                List<TargetingGroup> groupList = targetingGroupDao.get(content.getContentId());
+                for (TargetingGroup group : groupList) {
+                    if (evaluator.evaluate(group).isTrue()) {
+                        treeMap.put(group.getClickThroughRate(), content);
+                    }
+                }
+            }
+
+            // convert new code to streams
+//            final List<AdvertisementContent> contents = contentDao.get(marketplaceId);
+//            TreeMap<Double, AdvertisementContent> treeMap = contents.stream()
+//                    .flatMap(group -> targetingGroupDao.get(group.getContentId()).stream())
+//                    .filter(group -> evaluator.evaluate(group).isTrue())
+//                    .collect(Collectors.toMap(
+//                            TargetingGroup::getClickThroughRate,
+//                            ));
+
+            
+            // Original code
+//            final List<AdvertisementContent> contents = contentDao.get(marketplaceId).stream()
+//                    .filter(content -> targetingGroupDao.get(content.getContentId()).stream()
+//                            .anyMatch(group -> evaluator.evaluate(group).isTrue()))
+//                            .collect(Collectors.toList());
+
+
+            if (!treeMap.isEmpty()) {
+//            if (CollectionUtils.isNotEmpty(updatedContents)) {
 //        Then randomly return one of the ads that the customer is eligible for (if any).
-                AdvertisementContent randomAdvertisementContent = contents.get(random.nextInt(contents.size()));
-                generatedAdvertisement = new GeneratedAdvertisement(randomAdvertisementContent);
+//                AdvertisementContent randomAdvertisementContent = contents.get(random.nextInt(contents.size()));
+//                generatedAdvertisement = new GeneratedAdvertisement(randomAdvertisementContent);
+                AdvertisementContent highestClickRate = treeMap.lastEntry().getValue();
+                generatedAdvertisement = new GeneratedAdvertisement(highestClickRate);
+
             }
 
         }
